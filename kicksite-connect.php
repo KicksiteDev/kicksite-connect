@@ -8,14 +8,23 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Registration endpoint on the Kicksite App
-define( "KICKSITE_REGISTER_URL", "https://app.kicksite.net/api/v1/wp/register" );
+// Filepath for the plugin
+define( 'KICKSITE_URL', plugin_dir_url( __FILE__ ) );
+
+// Slug for consistent naming
+define( 'KICKSITE_SLUG', 'kicksite-connect' );
 
 // Query parameter name the plugin listens for
 define( "KICKSITE_TOKEN_PARAM", "kicksite_token" );
 
 // WordPress options key for the stored secret
 define( "KICKSITE_SECRET_OPTION", "kicksite_wp_secret" );
+
+// WordPress option key for the client's Kicksite subdomain
+define( "KICKSITE_SUBDOMAIN_OPTION", "kicksite_subdomain" );
+
+// WordPress option key for the api bearer token generated in Kicksite
+define( "KICKSITE_TOKEN_OPTION", "kicksite_bearer_token" );
 
 // WordPress options key for a stored registration error
 define( "KICKSITE_ERROR_OPTION", "kicksite_registration_error" );
@@ -37,8 +46,7 @@ require_once ( __DIR__ . "/includes/features/autologin/class-token-validator.php
 require_once ( __DIR__ . "/includes/features/autologin/class-user-provisioner.php" );
 
 register_activation_hook( __FILE__, function() {
-  // Calls the Kicksite_Activator class and activate method to pass in a new instance off the Kicksite Api Client
-  Kicksite_Activator::activate( new Kicksite_Api_Client() );
+  Kicksite_Activator::activate();
 } );
 
 register_deactivation_hook( __FILE__, function() {
