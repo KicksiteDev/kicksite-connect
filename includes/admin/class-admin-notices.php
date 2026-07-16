@@ -12,7 +12,7 @@ class Kicksite_Admin_Notices
     // in a WordPress admin notice banner
     printf(
       '<div class="notice notice-error"><p>
-        <strong>There was an error during registration (error: %s). Please Contact Kicksite Support.
+        <strong>There was an error during registration (error: %s). Please Contact Kicksite Support.</strong>
       </p></div>',
       esc_html( $error )
     );

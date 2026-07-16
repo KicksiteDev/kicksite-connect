@@ -59,7 +59,9 @@ class Kicksite_Admin
   // Renders the settings page showing one of three states:
   // successful registration, an error with the registration process, or not yet connected with instructions to enter settings.
   public function render_page() {
-    $registered = (bool) get_option( KICKSITE_SECRET_OPTION );
+    $registered = (bool) get_option( KICKSITE_SECRET_OPTION )
+               && (bool) get_option( KICKSITE_SUBDOMAIN_OPTION )
+               && (bool) get_option( KICKSITE_TOKEN_OPTION );
     $error  = get_option( KICKSITE_ERROR_OPTION );
     $slug = KICKSITE_SLUG;
     $safe_url = esc_url( admin_url( 'admin-post.php' ) );
@@ -76,7 +78,7 @@ class Kicksite_Admin
       $status_message = "<p><i class='fa-duotone fa-solid fa-square-check' style='color: green;'></i> Connected.</p>";
     } else {
       $status = "no-connection";
-      $status_message = "<p><i class='fa-sharp-duotone fa-light fa-robot' style='color: gray;'></i> No key registered yet. Enter your subdomain and token below and click Save & Continue.</p>";
+      $status_message = "<p><i class='fa-sharp-duotone fa-light fa-robot' style='color: gray;'></i> No registration found. Enter your subdomain and token below and click Save & Continue.</p>";
     }
 
     // Form

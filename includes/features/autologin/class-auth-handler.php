@@ -31,7 +31,7 @@ class Kicksite_Auth_Handler
     }
 
     // Log the user in by setting auth cookies, then redirect to strip the token from the URL
-    wp_set_auth_cookies( $user->ID );
+    wp_set_auth_cookie( $user->ID );
     $this->redirect_cleanup();
   }
 

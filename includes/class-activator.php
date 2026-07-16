@@ -7,6 +7,8 @@ class Kicksite_Activator
     $secret = bin2hex( random_bytes(32) );
 
     // Saving the hex string to the wp options table under the key KICKSITE_SECRET_OPTION
-    update_option( KICKSITE_SECRET_OPTION, $secret );
+    if ( !get_option( KICKSITE_SECRET_OPTION ) ) {
+      update_option( KICKSITE_SECRET_OPTION, $secret );
+    }
   }
 }

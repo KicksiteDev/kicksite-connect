@@ -14,7 +14,7 @@ class Kicksite_Token_Validator
     $data = $header_b64 . '.' . $payload_b64;
   
     // Recreate the expected signature by HMAC-SHA256 signing the header and payload, then base64url-encoding the result
-    $expected = $this->base64url_encode( hash_hmac( 'sha256', $data , $secret ) );
+    $expected = $this->base64url_encode( hash_hmac( 'sha256', $data , $secret, true ) );
 
     // Check whether the locally computed signature matches the one from the token
     if ( !hash_equals( $expected, $payload_sig_b64 ) ) return NULL;
