@@ -5,7 +5,7 @@ class Kicksite_Api_Client
   public function register(string $url, string $secret) {
     $subdomain = get_option( KICKSITE_SUBDOMAIN_OPTION );
     $token = get_option( KICKSITE_TOKEN_OPTION );
-    $endpoint_url = "https://{$subdomain}.kicksite.net/api/v1/wp/register";
+    $endpoint_url = "https://{$subdomain}.kicksite.net/v1/wordpress/register";
 
     // Post payload body containing the site's url and secret hex key
     $body = [

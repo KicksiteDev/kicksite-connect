@@ -32,6 +32,9 @@ define( "KICKSITE_ERROR_OPTION", "kicksite_registration_error" );
 // Role assigned to auto-provisioned users
 define( "KICKSITE_WP_ROLE", "subscriber" );
 
+// Kicksite admin email domain
+define( 'KICKSITE_ADMIN_DOMAIN', '@kicksite.net' );
+
 // Required functions
 require_once ( __DIR__ . "/includes/class-kicksite.php" );
 require_once ( __DIR__ . "/includes/class-activator.php" );
