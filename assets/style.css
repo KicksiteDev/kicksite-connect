@@ -3,6 +3,10 @@
   max-width: 800px;
 }
 
+.kicksite-connect-form-container .description {
+  color: #646970;
+}
+
 /* Message status container */
 .kicksite-connect-status {
   display: flex;
@@ -33,7 +37,8 @@
 .form-label {
   display: inline-block;
   margin-bottom: 0.5rem;
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Form input field style */
