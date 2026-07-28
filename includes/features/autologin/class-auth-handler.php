@@ -30,9 +30,34 @@ class Kicksite_Auth_Handler
       return;
     }
 
-    // Log the user in by setting auth cookies, then redirect to strip the token from the URL
-    wp_set_auth_cookie( $user->ID );
-    $this->redirect_cleanup();
+    // Store the user ID in a short-lived transient keyed by a random token.
+    // Then respond with a self-submitting POST form to the homepage instead of a redirect.
+    // Flywheel's Fastly CDN strips Set-Cookie headers from GET responses, but allows them
+    // on POST responses — the POST to handle_post_login() is where the auth cookie actually lands.
+    $login_token = bin2hex( random_bytes(16) );
+    set_transient( 'kicksite_login_' . $login_token, $user->ID, 30 );
+    $post_url = esc_url( home_url() );
+    $safe_token = esc_attr( $login_token );
+    nocache_headers();
+    echo '<form id="ksf" method="post" action="' . $post_url . '">';
+    echo '<input type="hidden" name="kicksite_login" value="' . $safe_token . '">';
+    echo '</form><script>document.getElementById("ksf").submit();</script>';
+    exit;
+  }
+
+  // Receives the POST form submission from handle(), verifies the one-time transient token,
+  // sets the WordPress auth cookie, then navigates to the homepage via JS.
+  // Using window.location.replace keeps the login flow out of the browser's back-button history.
+  public function handle_post_login() {
+    if ( $_SERVER['REQUEST_METHOD'] !== 'POST' || empty( $_POST['kicksite_login'] ) ) return;
+    $token = sanitize_text_field( $_POST['kicksite_login'] );
+    $user_id = get_transient( 'kicksite_login_' . $token );
+    if ( ! $user_id ) return;
+    delete_transient( 'kicksite_login_' . $token );
+    wp_set_auth_cookie( (int) $user_id );
+    nocache_headers();
+    echo '<script>window.location.replace(' . wp_json_encode( home_url() ) . ');</script>';
+    exit;
   }
 
   private function redirect_cleanup() {
