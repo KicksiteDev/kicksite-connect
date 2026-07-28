@@ -2,20 +2,22 @@
 
 class Kicksite_Admin
 {
-  // Creates a new options page that appears under the "Settings" section of the left-hand sidebar
+  // Creates a new menu page that appears in the left-hand sidebar
   public function add_settings_page() {
-    add_options_page(
+    add_menu_page(
       __( 'Kicksite', 'kicksite-connect' ),
       __( 'Kicksite', 'kicksite-connect' ),
       'manage_options',
       'kicksite-connect',
-      [ $this, 'render_page' ]
+      [ $this, 'render_page' ],
+      'dashicons-kicksite',
+      17
     );
   }
 
   // Enquque custom stylesheet
   public function enqueue_styles( $hook ) {
-    if ( $hook !== 'settings_page_kicksite-connect' ) return;
+    if ( $hook !== 'toplevel_page_kicksite-connect' ) return;
     wp_enqueue_style(
       'kicksite-admin',
       KICKSITE_URL . 'assets/style.css'
@@ -28,9 +30,13 @@ class Kicksite_Admin
 
     $subdomain = sanitize_text_field( $_POST['kicksite_subdomain'] ?? '' );
     $token = sanitize_text_field( $_POST['kicksite_bearer_token'] ?? '' );
+    $app_id = sanitize_text_field( $_POST['kicksite_client_app_id'] ?? '' );
+    $secret_key = sanitize_text_field( $_POST['kicksite_secret_key'] ?? '' );
 
     update_option( KICKSITE_SUBDOMAIN_OPTION, $subdomain );
     update_option( KICKSITE_TOKEN_OPTION, $token );
+    update_option( KICKSITE_APP_ID_OPTION, $app_id );
+    update_option( KICKSITE_SECRET_KEY_OPTION, $secret_key );
 
     $secret = get_option( KICKSITE_SECRET_OPTION );
 
@@ -52,7 +58,7 @@ class Kicksite_Admin
       delete_option( KICKSITE_ERROR_OPTION );
     }
 
-    wp_redirect( admin_url( 'options-general.php?page=kicksite-connect' ) );
+    wp_redirect( admin_url( 'admin.php?page=kicksite-connect' ) );
     exit;
   }
 
@@ -67,6 +73,8 @@ class Kicksite_Admin
     $safe_url = esc_url( admin_url( 'admin-post.php' ) );
     $safe_subdomain = esc_attr( get_option( KICKSITE_SUBDOMAIN_OPTION, '' ) );
     $safe_bearer_token = esc_attr( get_option( KICKSITE_TOKEN_OPTION, '' ) );
+    $safe_app_id = esc_attr( get_option( KICKSITE_APP_ID_OPTION, '' ) );
+    $safe_secret_key = esc_attr( get_option( KICKSITE_SECRET_KEY_OPTION, '' ) );
 
     echo "<div class='{$slug}-title'><h1>Kicksite</h1></div>";
 
@@ -98,12 +106,28 @@ class Kicksite_Admin
     echo "<div class='mb-3'>";
     echo "<label for='kicksite_subdomain' class='form-label'>Kicksite Subdomain</label>";
     echo "<input type='text' id='kicksite_subdomain' name='kicksite_subdomain' value='{$safe_subdomain}' class='form-control'>";
+    echo "<p class='description'>The url for the client's Kicksite account. Enter just the subdomain portion — for https://gymname.kicksite.net, enter gymname</p>";
     echo "</div>";
 
     // Bearer token field
     echo "<div class='mb-3'>";
-    echo "<label for='kicksite_bearer_token' class='form-label'>Kicksite Bearer Token</label>";
+    echo "<label for='kicksite_bearer_token' class='form-label'>Kicksite Autologin API Token</label>";
     echo "<input type='text' id='kicksite_bearer_token' name='kicksite_bearer_token' value='{$safe_bearer_token}' class='form-control'>";
+    echo "<p class='description'>Token generated from the admin or school website integration page.</p>";
+    echo "</div>";
+
+    // Client App ID field
+    echo "<div class='mb-3'>";
+    echo "<label for='kicksite_client_app_id' class='form-label'>Client Application ID <span class='description'>Optional</span></label>";
+    echo "<input type='text' id='kicksite_client_app_id' name='kicksite_client_app_id' value='{$safe_app_id}' class='form-control'>";
+    echo "<p class='description'>Found under Client Applications in your Kicksite account. Required for schedule integration.</p>";
+    echo "</div>";
+
+    // Client Secret Key field
+    echo "<div class='mb-3'>";
+    echo "<label for='kicksite_secret_key' class='form-label'>Client Secret Key <span class='description'>Optional</span></label>";
+    echo "<input type='text' id='kicksite_secret_key' name='kicksite_secret_key' value='{$safe_secret_key}' class='form-control'>";
+    echo "<p class='description'>Found alongside the Client Application ID. Required for schedule integration.</p>";
     echo "</div>";
 
     submit_button( 'Save & Continue' );

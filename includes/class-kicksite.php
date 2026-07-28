@@ -18,6 +18,7 @@ class Kicksite
 
   private function kicksite_public_hooks() {
     $handle = new Kicksite_Auth_Handler();
+    $schedule_api = new Kicksite_Schedule_Api();
     add_action( 'init', [ $handle, 'handle' ] );
     add_action( 'init', [ $handle, 'handle_post_login' ] );
     add_action( 'init', [ $schedule_api, 'fetch_token' ] );

@@ -35,6 +35,12 @@ define( "KICKSITE_WP_ROLE", "subscriber" );
 // Kicksite admin email domain
 define( 'KICKSITE_ADMIN_DOMAIN', '@kicksite.net' );
 
+// Kicksite client application id found under "client applications"
+define( "KICKSITE_APP_ID_OPTION", "kicksite_app_id" );
+
+// Kicksite secret key found under "client applications"
+define( "KICKSITE_SECRET_KEY_OPTION", "kicksite_secret_key" );
+
 // Required functions
 require_once ( __DIR__ . "/includes/class-kicksite.php" );
 require_once ( __DIR__ . "/includes/class-activator.php" );
@@ -47,6 +53,7 @@ require_once ( __DIR__ . "/includes/admin/class-admin-notices.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-auth-handler.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-token-validator.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-user-provisioner.php" );
+require_once ( __DIR__ . "/includes/features/schedule/class-schedule-api.php" );
 
 register_activation_hook( __FILE__, function() {
   Kicksite_Activator::activate();
