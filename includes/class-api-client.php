@@ -5,7 +5,7 @@ class Kicksite_Api_Client
   public function register(string $url, string $secret) {
     $subdomain = get_option( KICKSITE_SUBDOMAIN_OPTION );
     $token = get_option( KICKSITE_TOKEN_OPTION );
-    $endpoint_url = "https://{$subdomain}.kicksite.net/v1/wordpress/register";
+    $endpoint_url = "https://{$subdomain}.kicksite.net/v1/wordpress/registrations";
 
     // Post payload body containing the site's url and secret hex key
     $body = [
@@ -39,7 +39,8 @@ class Kicksite_Api_Client
     // If the code isn't a successful 200, then create a WP_Error with the
     // code and message so save_settings can store it.
     if ( $code !== 200 ) {
-      return new WP_Error( $code, 'Registration failed' );
+      $body = wp_remote_retrieve_body( $response );
+      return new WP_Error( $code, "Code: {$code} — {$body}" );
     }
 
     return true;
