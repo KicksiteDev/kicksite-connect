@@ -20,7 +20,7 @@ class Kicksite_Admin
     if ( $hook !== 'toplevel_page_kicksite-connect' ) return;
     wp_enqueue_style(
       'kicksite-admin',
-      KICKSITE_URL . 'assets/style.css'
+      KICKSITE_URL . 'assets/css/admin.css'
     );
   }
 
@@ -33,28 +33,28 @@ class Kicksite_Admin
     $app_id = sanitize_text_field( $_POST['kicksite_client_app_id'] ?? '' );
     $secret_key = sanitize_text_field( $_POST['kicksite_secret_key'] ?? '' );
 
-    update_option( KICKSITE_SUBDOMAIN_OPTION, $subdomain );
-    update_option( KICKSITE_TOKEN_OPTION, $token );
-    update_option( KICKSITE_APP_ID_OPTION, $app_id );
-    update_option( KICKSITE_SECRET_KEY_OPTION, $secret_key );
-
-    $secret = get_option( KICKSITE_SECRET_OPTION );
-
-    if ( !$secret ) {
-      // Creates a new 64 character hex string if one doesn't exist yet and update option value
-      $secret = bin2hex( random_bytes(32) );
-      update_option( KICKSITE_SECRET_OPTION, $secret );
-    }
+    $secret = get_option( KICKSITE_SECRET_OPTION ) ?: bin2hex( random_bytes(32) );
 
     $api = new Kicksite_Api_Client();
-    // Send the request to Kicksite with the secret hex key
-    $result = $api->register( get_site_url(), $secret );
+    $result = $api->register( get_site_url(), $secret, $subdomain, $token );
 
-    // Check if $result returns a WP_Error, if so, store the error message 
-    // in the wp options table under the key KICKSITE_ERROR_OPTION
+    // Check if $result returns a WP_Error, return friendly message for troubleshooting
+    // invalid api token or incorrect subdomain, otherwise show the default error message.
+    // Store the error message in the wp options table under the key KICKSITE_ERROR_OPTION.
+    // Update the values in the the db only if a successful connection is made
     if ( is_wp_error( $result ) ) {
-      update_option( KICKSITE_ERROR_OPTION, $result->get_error_message() );
+      $message = match( $result->get_error_code() ) {
+        401 => 'Invalid API token. Please check your Kicksite Autologin API Token.',
+        404 => 'Subdomain not found. Please check that your Kicksite Subdomain is correct.',
+        default => 'Registration failed. ' . $result->get_error_message(),
+      };
+      update_option( KICKSITE_ERROR_OPTION, $message );
     } else {
+      update_option( KICKSITE_SUBDOMAIN_OPTION, $subdomain );
+      update_option( KICKSITE_TOKEN_OPTION, $token );
+      update_option( KICKSITE_APP_ID_OPTION, $app_id );
+      update_option( KICKSITE_SECRET_KEY_OPTION, $secret_key );
+      update_option( KICKSITE_SECRET_OPTION, $secret );
       delete_option( KICKSITE_ERROR_OPTION );
     }
 

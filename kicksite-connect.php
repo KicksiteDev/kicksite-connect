@@ -8,8 +8,14 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Filepath for the plugin
+// Web url for the plugin
 define( 'KICKSITE_URL', plugin_dir_url( __FILE__ ) );
+
+// Filepath for the plugin
+define( 'KICKSITE_PATH', plugin_dir_path( __FILE__ ) );
+
+// Plugin Version
+define( 'KICKSITE_CONNECT_VERSION', '1.0.0' ); // ---> KEEP IN SYNC WITH HEADER VERSION NUMBER <---
 
 // Slug for consistent naming
 define( 'KICKSITE_SLUG', 'kicksite-connect' );
@@ -53,6 +59,8 @@ require_once ( __DIR__ . "/includes/admin/class-admin-notices.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-auth-handler.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-token-validator.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-user-provisioner.php" );
+require_once ( __DIR__ . "/includes/features/calendar/class-calendar-renderer.php" );
+require_once ( __DIR__ . "/includes/features/calendar/class-calendar-submission.php" );
 require_once ( __DIR__ . "/includes/features/schedule/class-schedule-api.php" );
 
 register_activation_hook( __FILE__, function() {

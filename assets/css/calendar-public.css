@@ -1,0 +1,170 @@
+.kicksite-calendar {
+  .container {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+
+  .ks-calendar-heading,
+  .ks-track-wizard {
+    display: flex;
+    width: 100%;
+    @media (min-width: 768px) {
+      width: 50%;
+    }
+  }
+
+  .ks-calendar-heading {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ks-track-container {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .ks-calendar-track {
+    display: flex;
+    width: 300%;
+    transition: transform 0.3s ease;
+  }
+
+  .step-1,
+  .step-2,
+  .step-3 {
+    flex: 0 0 33.33%;
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 5px;
+  }
+
+  /* th {
+    min-height: 40px;
+  } */
+
+  td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 15px 5px;
+    span {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  td.ks-day--active span {
+    background-color: #453838;
+  }
+
+  .ks-calendar-nav-back {
+    margin-bottom: 1rem;
+    padding-right: 1rem;
+    cursor: pointer;
+    &:hover {
+      color: red;
+    }
+    i {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .ks-classes {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "title      time"
+      "instructor time";
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: solid 1px white;
+    cursor: pointer;
+  }
+
+  .ks-class-title {
+    grid-area: title;
+    font-size: 1.4rem;
+  }
+
+  .ks-class-time-slot {
+    grid-area: time;
+    align-self: center;
+    font-size: 2rem;
+    font-weight: 200;
+  }
+
+  .ks-class-intrcutor {
+    grid-area: instructor;
+    font-weight: 200;
+  }
+
+  .field-group {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+
+  .ks-cal-form-name {
+    flex-direction: column;
+  }
+
+  .ks-cal-form-email {
+    flex-direction: column;
+  }
+
+  .ks-cal-form-birthdate {
+    flex-direction: column;
+  }
+
+  .ks-cal-form-phone {
+    flex-direction: column;
+  }
+
+  .ks-cal-form-phone-number {
+    display: flex;
+    align-items: center;
+  }
+
+  .ks-cal-form-sms {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    label {
+      margin-bottom: 0;
+      margin-right: 0.5rem;
+    }
+    input {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .ks-cal-sms-notification {
+    background-color: #363131;
+    padding: 1rem;
+    font-size: 0.8rem;
+    font-weight: 200;
+    margin-bottom: 2rem;
+  }
+
+  label {
+    margin-bottom: 0.5rem;
+  }
+
+  input:not(.wp-element-button) {
+    background-color: var(--wp--preset--color--primary-text);
+    color: white;
+    border: solid 1px white;
+    height: 2rem;
+  }
+}
