@@ -135,5 +135,25 @@ class Kicksite_Admin
     echo "</form>";
 
     echo "</div>";
+
+    $this->render_site_marker_card();
+  }
+
+  private function render_site_marker_card() {
+    $slug = KICKSITE_SLUG;
+    $safe_tag = esc_html( Kicksite_Site_Marker::get_marker_tag() );
+
+    echo "<div class='{$slug}-marker-container kicksite-card mt-4'>";
+    echo "<h3 class='mb-4'>Site Marker</h3>";
+
+    echo "<div class='{$slug}-status connected'>";
+    echo "<p><i class='fa-duotone fa-solid fa-square-check' style='color: green;'></i> Active on every page.</p>";
+    echo "</div>";
+
+    echo "<code class='{$slug}-marker-tag'>{$safe_tag}</code>";
+
+    echo "<p class='description'>This tag is added to every page so Kicksite can confirm your site is still connected to our platform. It is not visible to visitors and contains no private information.</p>";
+
+    echo "</div>";
   }
 }

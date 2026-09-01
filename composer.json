@@ -1,0 +1,20 @@
+{
+    "name": "kicksite/kicksite-connect",
+    "description": "WordPress plugin for Kicksite integrations and connections",
+    "type": "wordpress-plugin",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "brain/monkey": "^2.6",
+        "phpunit/phpunit": "^10.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        }
+    }
+}
