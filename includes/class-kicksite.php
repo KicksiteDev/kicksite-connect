@@ -19,9 +19,11 @@ class Kicksite
   private function kicksite_public_hooks() {
     $handle = new Kicksite_Auth_Handler();
     $schedule_api = new Kicksite_Schedule_Api();
+    $marker = new Kicksite_Site_Marker();
     add_action( 'init', [ $handle, 'handle' ] );
     add_action( 'init', [ $handle, 'handle_post_login' ] );
     add_action( 'init', [ $schedule_api, 'fetch_token' ] );
     add_action( 'init', [ $schedule_api, 'fetch_schedule' ] );
+    add_action( 'wp_head', [ $marker, 'render_marker' ] );
   }
 }

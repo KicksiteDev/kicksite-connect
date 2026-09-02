@@ -25,12 +25,38 @@
   border-left: 3px solid gray;
 }
 
+.kicksite-connect-status.connected {
+  padding: 0 1rem;
+  border: 1px solid green;
+  border-left: 3px solid green;
+}
+
 /* Card style */
 .kicksite-card {
   padding: 2rem;
   background: #fff;
   border: 1px solid #c3c4c7;
   border-radius: 10px;
+}
+
+/* Site marker card */
+.kicksite-connect-marker-container {
+  max-width: 800px;
+}
+
+.kicksite-connect-marker-container .description {
+  color: #646970;
+}
+
+.kicksite-connect-marker-tag {
+  display: block;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  border-radius: 0.25rem;
 }
 
 /* Form label style */

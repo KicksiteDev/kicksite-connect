@@ -41,6 +41,14 @@ define( "KICKSITE_APP_ID_OPTION", "kicksite_app_id" );
 // Kicksite secret key found under "client applications"
 define( "KICKSITE_SECRET_KEY_OPTION", "kicksite_secret_key" );
 
+// Name attribute of the hidden site identity marker meta tag.
+// Kicksite's website monitoring matches on this exactly. Never change it.
+define( "KICKSITE_MARKER_NAME", "kicksite-site-marker" );
+
+// Content attribute of the hidden site identity marker meta tag.
+// Kicksite's website monitoring matches on this exactly. Never change it.
+define( "KICKSITE_MARKER_VALUE", "kicksite" );
+
 // Required functions
 require_once ( __DIR__ . "/includes/class-kicksite.php" );
 require_once ( __DIR__ . "/includes/class-activator.php" );
@@ -54,6 +62,7 @@ require_once ( __DIR__ . "/includes/features/autologin/class-auth-handler.php" )
 require_once ( __DIR__ . "/includes/features/autologin/class-token-validator.php" );
 require_once ( __DIR__ . "/includes/features/autologin/class-user-provisioner.php" );
 require_once ( __DIR__ . "/includes/features/schedule/class-schedule-api.php" );
+require_once ( __DIR__ . "/includes/features/marker/class-site-marker.php" );
 
 register_activation_hook( __FILE__, function() {
   Kicksite_Activator::activate();
