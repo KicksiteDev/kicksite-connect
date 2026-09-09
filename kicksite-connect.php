@@ -4,6 +4,7 @@
  * Description: Connects your WordPress site to the Kicksite platform.
  * Version:     1.0.0
  * Author:      Kicksite
+ * Update URI:  https://github.com/KicksiteDev/kicksite-connect
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -13,6 +14,21 @@ define( 'KICKSITE_URL', plugin_dir_url( __FILE__ ) );
 
 // Slug for consistent naming
 define( 'KICKSITE_SLUG', 'kicksite-connect' );
+
+// Must match the Version header above. tests/Unit/UpdaterTest.php asserts the two
+// agree, because a mismatch would make every site either miss updates entirely or
+// reinstall the same release forever.
+define( "KICKSITE_VERSION", "1.0.0" );
+
+// "kicksite-connect/kicksite-connect.php" — how WordPress identifies this plugin.
+define( "KICKSITE_PLUGIN_BASENAME", plugin_basename( __FILE__ ) );
+
+// GitHub repository that publishes releases. This repo MUST be public: customer
+// sites download the release zip from it anonymously, with no credentials.
+define( "KICKSITE_UPDATE_REPO", "KicksiteDev/kicksite-connect" );
+
+// WordPress option key recording the version that last completed its migrations
+define( "KICKSITE_VERSION_OPTION", "kicksite_installed_version" );
 
 // Query parameter name the plugin listens for
 define( "KICKSITE_TOKEN_PARAM", "kicksite_token" );
@@ -63,6 +79,7 @@ require_once ( __DIR__ . "/includes/features/autologin/class-token-validator.php
 require_once ( __DIR__ . "/includes/features/autologin/class-user-provisioner.php" );
 require_once ( __DIR__ . "/includes/features/schedule/class-schedule-api.php" );
 require_once ( __DIR__ . "/includes/features/marker/class-site-marker.php" );
+require_once ( __DIR__ . "/includes/features/updater/class-updater.php" );
 
 register_activation_hook( __FILE__, function() {
   Kicksite_Activator::activate();
