@@ -5,9 +5,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for includes/features/marker/class-site-marker.php
  *
- * The site marker is a contract with a separate repository: Kicksite's
- * website monitoring tool reads this tag to decide whether a customer domain
- * is still running the Kicksite plugin.
+ * The site marker is a contract with a separate Kicksite service, which
+ * reads this tag from customer sites. Its exact text is part of that
+ * contract.
  *
  * Because the consumer lives elsewhere, these tests deliberately assert
  * hard-coded literals rather than referencing the constants. Comparing a
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SiteMarkerTest extends TestCase
 {
-  /** The exact string the monitoring tool searches for. */
+  /** The exact string the consuming service searches for. */
   private const EXPECTED_TAG = '<meta name="kicksite-site-marker" content="kicksite">';
 
   public function test_marker_tag_matches_the_monitoring_contract(): void
@@ -24,8 +24,8 @@ class SiteMarkerTest extends TestCase
     $this->assertSame(
       self::EXPECTED_TAG,
       Kicksite_Site_Marker::get_marker_tag(),
-      'The site marker tag is a contract with the website monitoring repo. '
-      . 'If this assertion fails, monitoring will stop recognising our sites.'
+      'The site marker tag is a contract with a separate Kicksite service. '
+      . 'If this assertion fails, that service will stop recognising our sites.'
     );
   }
 
@@ -93,8 +93,8 @@ class SiteMarkerTest extends TestCase
   /**
    * The marker must not depend on the Kicksite Integration Settings being
    * filled in. A site part-way through onboarding is still a Kicksite site,
-   * and gating the marker on configuration would report every new build we
-   * are working on as a customer who left.
+   * and gating the marker on configuration would misreport it to the
+   * consuming service.
    */
   public function test_marker_does_not_read_any_options(): void
   {
