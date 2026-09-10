@@ -19,11 +19,24 @@ function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
   return true;
 }
 
+function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+  $GLOBALS['kicksite_test_hooks'][] = [
+    'hook' => $hook,
+    'callback' => $callback,
+    'priority' => $priority,
+  ];
+  return true;
+}
+
 function register_activation_hook( $file, $callback ) {}
 function register_deactivation_hook( $file, $callback ) {}
 
 function plugin_dir_url( $file ) {
   return 'https://example.test/wp-content/plugins/kicksite-connect/';
+}
+
+function plugin_basename( $file ) {
+  return 'kicksite-connect/' . basename( $file );
 }
 
 // Minimal escaping stubs. The real WordPress versions do more, but for the

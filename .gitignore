@@ -2,3 +2,4 @@
 .claude
 /vendor
 .phpunit.result.cache
+/dist

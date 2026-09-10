@@ -1,0 +1,37 @@
+# Files kept in the repo but never deployed to a client site.
+# DeployHQ does NOT honour .gitattributes export-ignore, so these rules
+# must mirror the export-ignore list in .gitattributes by hand.
+# Directories need two rules: the dir itself AND its contents. No trailing slashes.
+
+# Dev tooling
+bin
+bin/**
+tests
+tests/**
+phpunit.xml
+composer.json
+composer.lock
+
+# Never present in the repo (vendor is gitignored), listed as a backstop
+# in case a build pipeline ever generates it.
+vendor
+vendor/**
+
+# Build output
+dist
+dist/**
+
+# CI
+.github
+.github/**
+
+# Repo metadata
+.gitattributes
+.gitignore
+.deployignore
+README.md
+RELEASING.md
+.phpunit.result.cache
+.mcp.json
+.claude
+.claude/**

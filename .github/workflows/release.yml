@@ -1,0 +1,59 @@
+name: Release
+
+# Releases are cut by pushing a tag, never by merging. A release is a version
+# bump plus a tag, so several merges to main can ship together as one update.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # build-zip.sh reads the plugin header out of the tagged commit, so the
+          # tag's history has to be present rather than a shallow clone.
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      # A tag that disagrees with the plugin header is the failure mode that
+      # breaks updates silently. Sites compare a release against the Version
+      # header, so tagging v1.2.0 on a 1.1.0 header publishes a release that
+      # every site either ignores or reinstalls forever.
+      - name: Verify tag matches the plugin header version
+        run: |
+          HEADER="$(sed -n 's/^ \* Version: *\(.*\)$/\1/p' kicksite-connect.php | tr -d '[:space:]')"
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ "$HEADER" != "$TAG" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match the plugin header version ${HEADER}. Bump the Version header and KICKSITE_VERSION together, then retag."
+            exit 1
+          fi
+
+      - name: Build the plugin zip
+        run: bin/build-zip.sh --release "$GITHUB_REF_NAME"
+
+      # The attached zip is what customer sites download. Without it the release
+      # exists but nothing can install it, and Kicksite_Updater reports no update
+      # at all rather than falling back to GitHub's source archive.
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          # Globbed, not interpolated: the tag carries a leading v that the
+          # zip filename does not. dist/ is empty on a fresh runner.
+          files: dist/kicksite-connect-*.zip
+          generate_release_notes: true
