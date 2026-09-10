@@ -41,6 +41,11 @@ class Kicksite_Updater
   public function check( $update, $plugin_data, $plugin_file ) {
     if ( $plugin_file !== KICKSITE_PLUGIN_BASENAME ) return $update;
 
+    // "Check again" on the WordPress updates screen has to actually reach
+    // GitHub. Without this it is answered from a cache that can be twelve hours
+    // old, so forcing a check appears to work while changing nothing.
+    if ( ! empty( $_GET['force-check'] ) ) $this->clear_cache();
+
     $release = $this->get_latest_release();
     if ( ! $release ) return $update;
 
@@ -92,8 +97,12 @@ class Kicksite_Updater
     update_option( KICKSITE_VERSION_OPTION, KICKSITE_VERSION );
   }
 
-  // The cached lookup describes a release that may have just been installed, so
-  // it is dropped after any upgrade rather than left to expire.
+  // Drops the cached GitHub lookup.
+  //
+  // Runs after an upgrade, because the cache describes a release that may have
+  // just been installed, and whenever WordPress's own update list is deleted.
+  // That second case is what makes "check for updates" in WP-CLI and ManageWP
+  // reach GitHub instead of being answered from a stale cache.
   public function clear_cache() {
     delete_transient( self::CACHE_KEY );
     delete_transient( self::BACKOFF_KEY );

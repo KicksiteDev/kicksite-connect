@@ -74,6 +74,16 @@ class UpdaterTest extends TestCase
     $this->assertContains( 'auto_update_plugin', self::registered_hooks() );
   }
 
+  /**
+   * Without this, "check for updates" in WP-CLI or ManageWP refreshes
+   * WordPress's list but is still answered from our own cache, which can be
+   * twelve hours old. Forcing a check would appear to work and change nothing.
+   */
+  public function test_forcing_an_update_check_clears_the_cached_lookup(): void
+  {
+    $this->assertContains( 'delete_site_transient_update_plugins', self::registered_hooks() );
+  }
+
   public function test_force_auto_update_only_claims_this_plugin(): void
   {
     $updater = new Kicksite_Updater();

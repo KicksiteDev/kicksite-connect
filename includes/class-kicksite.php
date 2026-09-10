@@ -40,6 +40,7 @@ class Kicksite
     add_filter( 'update_plugins_github.com', [ $updater, 'check' ], 10, 3 );
     add_filter( 'auto_update_plugin', [ $updater, 'force_auto_update' ], 10, 2 );
     add_action( 'upgrader_process_complete', [ $updater, 'clear_cache' ] );
+    add_action( 'delete_site_transient_update_plugins', [ $updater, 'clear_cache' ] );
     add_action( 'init', [ $updater, 'maybe_run_migrations' ] );
   }
 }
