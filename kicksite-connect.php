@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kicksite Connect
  * Description: Connects your WordPress site to the Kicksite platform.
- * Version:     1.1.0
+ * Version:     1.1.1
  * Author:      Kicksite
  * Update URI:  https://github.com/KicksiteDev/kicksite-connect
  */
@@ -18,7 +18,7 @@ define( 'KICKSITE_SLUG', 'kicksite-connect' );
 // Must match the Version header above. tests/Unit/UpdaterTest.php asserts the two
 // agree, because a mismatch would make every site either miss updates entirely or
 // reinstall the same release forever.
-define( "KICKSITE_VERSION", "1.1.0" );
+define( "KICKSITE_VERSION", "1.1.1" );
 
 // "kicksite-connect/kicksite-connect.php" — how WordPress identifies this plugin.
 define( "KICKSITE_PLUGIN_BASENAME", plugin_basename( __FILE__ ) );
